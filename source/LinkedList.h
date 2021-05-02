@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <limits>
 
 template <typename T>
 struct ListNode {
@@ -12,6 +13,8 @@ template <typename T>
 class LinkedList {
 	ListNode<T>* root;
 	ListNode<T>* last;
+	mutable ListNode<T>* lastAccessed;
+	mutable int lastAccessedIndex;
 	int nodeCount;
 public:
 	LinkedList();
@@ -41,6 +44,8 @@ LinkedList<T>::LinkedList() {
 	root = nullptr;
 	last = nullptr;
 	nodeCount = 0;
+	lastAccessed = nullptr;
+	lastAccessedIndex = std::numeric_limits<int>::max();
 }
 
 template <typename T>
@@ -48,6 +53,8 @@ LinkedList<T>::LinkedList(const std::vector<T>& list) {
 	for (int i = 0; i < nodeCount; i++) {
 		this->push_back(list[i]);
 	}
+	lastAccessed = nullptr;
+	lastAccessedIndex = std::numeric_limits<int>::max();
 }
 
 template <typename T>
@@ -55,6 +62,8 @@ LinkedList<T>::LinkedList(const LinkedList& list) {
 	for (int i = 0; i < nodeCount; i++) {
 		this->push_back(list.get(i));
 	}
+	lastAccessed = nullptr;
+	lastAccessedIndex = std::numeric_limits<int>::max();
 }
 
 template <typename T>
@@ -65,6 +74,8 @@ LinkedList<T>::LinkedList(const LinkedList& list1, const LinkedList& list2) {
 	for (int i = 0; i < list2.nodeCount; i++) {
 		this->push_back(list2.get(i));
 	}
+	lastAccessed = nullptr;
+	lastAccessedIndex = std::numeric_limits<int>::max();
 }
 
 template <typename T>
@@ -181,10 +192,21 @@ T LinkedList<T>::get(int index) const {
 	if (index == nodeCount - 1) {
 		return last->data;
 	}
-	ListNode<T>* it = root;
+	ListNode<T>* it;
+	if (index > lastAccessedIndex) {
+		it = lastAccessed;
+		int temp = index;
+		index -= lastAccessedIndex;
+		lastAccessedIndex = temp;
+	}
+	else {
+		it = root;
+		lastAccessedIndex = index;
+	}
 	while (index--) {
 		it = it->next;
 	}
+	lastAccessed = it;
 	return it->data;
 }
 
@@ -196,10 +218,21 @@ T& LinkedList<T>::get(int index) {
 	if (index == nodeCount - 1) {
 		return last->data;
 	}
-	ListNode<T>* it = root;
+	ListNode<T>* it;
+	if (index > lastAccessedIndex) {
+		it = lastAccessed;
+		int temp = index;
+		index -= lastAccessedIndex;
+		lastAccessedIndex = temp;
+	}
+	else {
+		it = root;
+		lastAccessedIndex = index;
+	}
 	while (index--) {
 		it = it->next;
 	}
+	lastAccessed = it;
 	return it->data;
 }
 
