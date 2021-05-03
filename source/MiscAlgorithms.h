@@ -1,7 +1,9 @@
 #pragma once
 #include <vector>
 
-//Kadanes Algorithm - max subarray
-double KadanesAlgorithm(const std::vector<double>&);
-double KadanesAlgorithmNegative(const std::vector<double>&);
-int BinarySearch(const std::vector<int>&, const int);
+template<typename T>
+int BinarySearch(const std::vector<T>&, const T);
+template<typename T>
+void InsertionSort(std::vector<T>&);
+double Kadanes(const std::vector<double>&);
+double KadanesNegative(const std::vector<double>&);

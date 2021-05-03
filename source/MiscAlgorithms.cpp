@@ -2,16 +2,16 @@
 #include <cmath>
 #include <limits>
 
-
-int BinarySearch(const std::vector<int>& array, const int num) {
+template<typename T>
+int BinarySearch(const std::vector<T>& array, const T item) {
 	int left = 0;
 	int right = array.size() - 1;
 	while (left <= right) {
 		int middle = (right + left) / 2;
-		if (array[middle] == num) {
+		if (array[middle] == item) {
 			return middle;
 		}
-		else if (array[middle] > num) {
+		else if (array[middle] > item) {
 			right = middle - 1;
 		}
 		else {
@@ -21,7 +21,21 @@ int BinarySearch(const std::vector<int>& array, const int num) {
 	return -1;
 }
 
-double KadanesAlgorithm(const std::vector<double>& inputNumbers) {
+template<typename T>
+void InsertionSort(std::vector<T>& array) {
+	int j, key;
+	for (int i = 0; i < array.size(); i++) {
+		j = i - 1;
+		key = array[i];
+		while (j >= 0 && key < array[j]) {
+			array[j + 1] = array[j];
+			j--;
+		}
+		array[j + 1] = key;
+	}
+}
+
+double Kadanes(const std::vector<double>& inputNumbers) {
 	double bestSum = 0;
 	double currentSum = 0;
 	for (auto n : inputNumbers) {
@@ -31,7 +45,7 @@ double KadanesAlgorithm(const std::vector<double>& inputNumbers) {
 	return bestSum;
 }
 
-double KadanesAlgorithmNegative(const std::vector<double>& inputNumbers) {
+double KadanesNegative(const std::vector<double>& inputNumbers) {
 	double bestSum = -std::numeric_limits<double>::infinity();
 	double currentSum = 0;
 	for (auto n : inputNumbers) {
